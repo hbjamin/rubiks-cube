@@ -16,7 +16,7 @@ void draw_cube(vector<vector<string>> &cube);
 void draw_row(vector<string> row, int shift);
 void draw_filler_line(vector<string> row, int shift);
 void draw_line(int length, int shift);
-void draw_text(string text, double shift, double shift2);
+void draw_text(string text, double shift, double shift2, bool newline);
 void draw_blank(double length);
 void draw_buffer(int length);
 
@@ -67,6 +67,12 @@ int main(int nargs, char** argv) {
 
 void draw_cube(vector<vector<string>> &cube) {
   draw_buffer(120);
+  draw_text("^       ^       ^",4.15,0,true);
+  draw_text("|       |       |",4.15,0,true);
+  draw_text("|       |       |",4.15,0,true);
+  cout << endl;
+  draw_text("l       c       r",4.15,0,true);
+  cout << endl;
   //do in four levels
   for (int i=0;i<4;i++) {
     for (int j=0; j<3; j++) {
@@ -74,7 +80,14 @@ void draw_cube(vector<vector<string>> &cube) {
         vector<string> row = {cube[i][3*j],cube[i][3*j+1],cube[i][3*j+2],cube[i+1][3*j],cube[i+1][3*j+1],cube[i+1][3*j+2],cube[i+2][3*j],cube[i+2][3*j+1],cube[i+2][3*j+2]};
         draw_line(3,3);
         draw_filler_line(row,3);
-        draw_row(row,3);
+        if (j==0) {
+            draw_text("<---  u",2.45,0.25,false);
+          } else if (j==1) {
+            draw_text("<---  m",2.45,0.25,false);
+          } else if (j==2) {
+            draw_text("<---  d",2.45,0.25,false);
+          }
+        draw_row(row,0);
         draw_filler_line(row,3);
         if (j==2) {
 	  draw_line(3,3);
@@ -120,7 +133,7 @@ void draw_row(vector<string> row, int shift) {
     }
     cout << "\033[40m*";
   }
-  cout << endl;
+  cout << endl;    
 }
 
 void draw_filler_line(vector<string> row, int shift) {
@@ -158,13 +171,16 @@ void draw_line(int length, int shift) {
   cout << endl;
 }
 
-void draw_text(string text, double shift, double shift2) {
+void draw_text(string text, double shift, double shift2, bool newline) {
   if (shift>0) {
     draw_blank(shift);
   }
   cout << text;
   if (shift2>0) {
     draw_blank(shift2);
+  }
+  if (newline) {
+    cout << endl;
   }
 }
 
